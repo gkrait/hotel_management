@@ -9,6 +9,7 @@ Although accessing admin privileges requires a password
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include <ctype.h>
 
 //Method Declaration
 
@@ -59,9 +60,36 @@ struct Reservation
     char cli [20];
 }r,r2,r3;
 
-char price(struct Room  pri){ if( strcmp(pri.type, "1")==0) return "4500";
- if( strcmp(pri.type, "2")==0) return "6000";
-  if( strcmp(pri.type, "3")==0) return "6500"; }
+struct {
+ int year;
+ int month;
+ int day;
+} Date;
+float price(char  *pri){
+if( strcmp(&pri, "1")==0){ return 4500.0;}
+ else if( strcmp(&pri, "2")==0) {return 6000.0;}
+  else if( strcmp(&pri, "3")==0) {return 6500.0; }
+  else{
+   return 4;}}
+
+
+float CoefSaison(char* da){
+int d,m;
+int values[3];
+size_t converted;
+stringToIntList(da, values, sizeof values / sizeof values[0], &converted);
+d = values[0];
+m= values[1];
+if (  ( (m == 8 ) || (m==9 && m <=29  ) || ( m==7 && d>= 21 )  )) { return 1.4; } // Summer
+else if ( (m==9 && d > 29 ) || (m==12 && d < 21 ) || (m==11 ) ) { return 1.1; }
+else if ( (m==3 && d >= 20 ) || (m==12 && d >= 21 ) || (m==1 || m== 2 ) ) { return 0.8; }
+else if ( (m==3 && d < 20 ) || (m==7 && d < 21 ) || (m==4 || m== 5 ) ) { return 1.0; }
+else { return 0.0 ;}
+
+
+return 0.0;
+}
+
 
 void view_bookings_room(char * str1){
 
@@ -76,7 +104,6 @@ void view_bookings_room(char * str1){
 }}
 
 void view_bookings_client(char * str1){
-
     enter = fopen("reservations.txt","r");
     struct Reservation Res;
     printf("Le client a fait les réservations suivantes \n");
@@ -88,6 +115,164 @@ void view_bookings_client(char * str1){
 }}
 
 
+void roomssharedf(){
+int del;
+FILE *enter, *enter2;
+struct Room ro1, ro2;
+enter = fopen("rooms.txt","r");
+enter2 = fopen("rooms2.txt","w");
+struct Room *  rooms_list[100];
+struct Room *  rooms_list_ans[100][2];
+int i=1;
+    while (fscanf(enter,"%s %s %s %s",ro1.num, ro1.type , ro1.tv, ro1.avail ) != EOF){
+    fgetc(enter);
+    //rooms_list[i] =  ro1 ;
+     i = i+1;
+     }
+int j;
+int k = 1;
+for (i=1; i< 100; i++){
+for (j=i+1; j <= 100; j++){
+//ro2 = rooms_list[j];
+if  ( (strcmp( rooms_list[i] -> num, rooms_list[j] -> num )==1)
+ &&  (strcmp( rooms_list[i] ->type, rooms_list[j] -> type )==0) && ((strcmp( rooms_list[i]->tv, "1" )==1))
+  && ((strcmp( rooms_list[j] ->tv, "1" )==1)) ){
+rooms_list_ans[k][0] =& rooms_list[i];
+rooms_list_ans[k][1] =& rooms_list[j];
+ k++;
+  }
+
+
+}}
+
+
+     /*fprintf(enter2,"%s %s %s %s \n", ro1.num, ro1.type,ro1.tv,ro1.avail);}
+    fclose(enter2); fclose(enter);
+    enter = fopen("rooms.txt","r");
+    enter2 = fopen("rooms2.txt","r");
+    while (fscanf(enter,"%s %s %s %s",ro1.num, ro1.type , ro1.tv, ro1.avail ) != EOF){
+    fgetc(enter);
+    while (1){//fscanf(enter,"%s %s %s %s",ro2.num, ro2.type , ro2.tv, ro2.avail) != EOF ){
+      fgetc(enter2);
+             printf(ro1.num);
+         printf(",");
+         printf(ro2.num);
+          printf("\n");
+     }
+        // while(fscanf(enter,"%s %s %s %s",ro2.num, ro2.type , ro2.tv, ro2.avail ) != EOF){
+         //if  ( 1 ==1 ){
+
+         //scanf("%s",del);
+         //}
+
+}
+fclose(enter2); fclose(enter);
+    //printf(ro1.num);*/
+    }
+
+
+void stringToIntList(char *str, int *arr, size_t arrSize, size_t *count)
+{
+  /**
+   * The token variable holds the next token read from the input string
+   */
+  char *token;
+
+  /**
+   * Make a copy of the input string since we are going to use strtok(),
+   * which modifies its input.
+   */
+  char *localStr = malloc(strlen(str) + 1);
+  if (!localStr)
+  {
+    /**
+     * malloc() failed; we're going to treat this as a fatal error
+     */
+    exit(-1);
+  }
+  strcpy(localStr, str);
+
+  /**
+   * Initialize our output
+   */
+  *count = 0;
+
+  /**
+   * Retrieve the first token from the input string.
+   */
+  token = strtok(localStr, "/");
+  while (token && *count < arrSize)
+  {
+    char *chk;
+    int val = (int) strtol(token, &chk, 10);
+    if (isspace(*chk) || *chk == 0)
+    {
+      arr[(*count)++] = val;
+    }
+    else
+    {
+      printf("\"%s\" is not a valid integer\n", token);
+    }
+
+    /**
+     * Get the next token
+     */
+    token = strtok(NULL, "/");
+  }
+
+  /**
+   * We're done with the dynamic buffer at this point.
+   */
+  free(localStr);
+}
+
+void fifthquestion(){
+    char str1[20];
+    FILE *enter, *enter2;
+    struct Reservation Res1, Res2;
+    enter = fopen("reservations.txt","r");
+    enter2 = fopen("reservations.txt","r");
+    struct Reservation Res;
+    printf("Les qui partage les meme chose sont: \n");
+    while(fscanf(enter,"%s %s %s %s %s %s",Res.id_res,Res.days,Res.date,Res.nmb,Res.room ,Res.cli ) != -1){
+    fgetc(enter);
+
+    while(fscanf(enter2,"%s %s %s %s %s %s",Res2.id_res,Res2.days,Res2.date,Res2.nmb,Res2.room ,Res2.cli ) != -1){
+    fgetc(enter2);
+    if ((strcmp(Res1.cli, Res2.cli) ==1 ) & (strcmp(Res1.cli, Res2.cli) ==1)) {
+    int T ;
+    }
+}
+}
+printf("It is  not good");scanf("%s", str1);;
+fclose(enter);fclose(enter2);
+}
+
+
+
+void factures(){
+    struct Reservation Res;
+    FILE *fptr1 , *fpt;
+    printf("la liste des factures: \n");
+    char  file1[20]="reservations.txt";
+    char  file2[20]="rooms.txt";
+    fptr1 = fopen(file1,"r");
+    struct Reservation  Res2;
+    while(fscanf(fptr1,"%s %s %s %s %s %s",Res.id_res, Res.days,Res.date,Res.nmb,Res.room ,Res.cli ) != -1){
+    fgetc(fptr1);
+    fpt = fopen(file2,"r");//printf(Res.room);printf("\n");
+    while(fscanf(fpt,"%s %s %s %s",ro.num,ro.type,ro.tv,ro.avail) != -1 ){
+    fgetc(fpt);
+    strcpy(ro2.num,ro.num);
+    if (strcmp(ro.num, Res.room) ==0  ) { float resu= price(ro2.type) *  CoefSaison(Res.date) ;
+    printf(" Room num: %s , Client: %s ,Reserv ID %s , Num Days: %s, Price %.6f\n ",
+    Res.room,Res.cli, Res.id_res,Res.days, resu  );
+    }
+    }
+
+
+} fclose(fptr1);
+}
 
 //main method
 int main(){
@@ -118,6 +303,7 @@ int main(){
    	            printf("\n>>>>>>>>>>>>\t Afficher les histoire d'un client --> 4 \t<<<<<<<<<<<<");
                 printf("\n>>>>>>>>>>>>\tTo FIND guest of occupied room --> 5 \t<<<<<<<<<<<<");
                 printf("\n>>>>>>>>>>>>\tTo CHECKOUT room number of existing guest --> 6 <<<<<<<<<<<<\n");
+                printf("\n>>>>>>>>>>>>\tTo liste des factures --> 7 <<<<<<<<<<<<\n");
                 printf(">> ");
                 scanf("%d",&b);
 
@@ -145,11 +331,17 @@ int main(){
                         break;
                     }
                     case 5:{
-                        find_room();
+                        roomssharedf();
+                        printf("Done\n");
                         break;
                     }
                 case 6:{
                     checkout_guest();
+                    break;
+                    }
+
+                    case 7:{
+                    factures();
                     break;
                     }
                     default:{
