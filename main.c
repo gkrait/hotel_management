@@ -11,6 +11,8 @@ Although accessing admin privileges requires a password
 #include<string.h>
 #include <ctype.h>
 
+
+
 //Method Declaration
 
 void enter_name();
@@ -91,6 +93,54 @@ return 0.0;
 }
 
 
+ void roomssharedf(struct Room ** rooms_pairs){
+int del;
+FILE *enter, *enter2;
+struct Room  ro1, ro2;
+enter = fopen("rooms.txt","r");
+struct Room rooms_list[10];
+struct Room   rooms_list2[10];
+//struct Room   rooms_pairs[100][2];
+struct Room *roompPinter;
+int i=0;
+while (fscanf(enter,"%s %s %s %s",ro1.num, ro1.type , ro1.tv, ro1.avail ) != EOF){
+    fgetc(enter);
+    rooms_list[i]= ro1 ;
+    i = i+1;}
+int j;
+int k = 0;
+for (i=0; i< 4; i++){
+for (j=i+1; j <= 5; j++){
+//ro2 = rooms_list[j];
+if (1==1) /*( (strcmp( rooms_list[i].num,rooms_list[j].num )==1)
+ &&  (strcmp( rooms_list[i].type, rooms_list[j].type )==0) && ((strcmp(rooms_list[i].tv, "1" )==1))
+  && ((strcmp( rooms_list[j].tv, "1" )==1)) )*/{
+
+ //roompPinter =  &rooms_list[i];
+ memcpy(ro1.num ,  rooms_list[i].num,200 ); memcpy(ro1.tv,  rooms_list[i].tv,200 );memcpy(ro1.type,  rooms_list[i].type,200 );memcpy(ro1.avail,  rooms_list[i].avail,200 );
+
+rooms_list2[k]=ro1;
+ k= k+1;
+memcpy(ro1.num ,  rooms_list[j].num,200 ); memcpy(ro1.tv,  rooms_list[j].tv,200 );memcpy(ro1.type,  rooms_list[j].type,200 );memcpy(ro1.avail,  rooms_list[j].avail,200 );
+rooms_list2[k]=ro1;
+ k= k+1;
+printf("\n %s \n",rooms_list2[k].num);
+
+
+;
+ //roompPinter =  &rooms_list[j];
+ //rooms_pairs[k][1] =*roompPinter;
+
+
+    //printf("%s %s","rooms_pairs[k][0].num", "rooms_pairs[k][1].num");
+  }
+
+
+}}
+
+    }
+
+
 void view_bookings_room(char * str1){
 
     enter = fopen("reservations.txt","r");
@@ -114,61 +164,6 @@ void view_bookings_client(char * str1){
     }
 }}
 
-
-void roomssharedf(){
-int del;
-FILE *enter, *enter2;
-struct Room ro1, ro2;
-enter = fopen("rooms.txt","r");
-enter2 = fopen("rooms2.txt","w");
-struct Room *  rooms_list[100];
-struct Room *  rooms_list_ans[100][2];
-int i=1;
-    while (fscanf(enter,"%s %s %s %s",ro1.num, ro1.type , ro1.tv, ro1.avail ) != EOF){
-    fgetc(enter);
-    //rooms_list[i] =  ro1 ;
-     i = i+1;
-     }
-int j;
-int k = 1;
-for (i=1; i< 100; i++){
-for (j=i+1; j <= 100; j++){
-//ro2 = rooms_list[j];
-if  ( (strcmp( rooms_list[i] -> num, rooms_list[j] -> num )==1)
- &&  (strcmp( rooms_list[i] ->type, rooms_list[j] -> type )==0) && ((strcmp( rooms_list[i]->tv, "1" )==1))
-  && ((strcmp( rooms_list[j] ->tv, "1" )==1)) ){
-rooms_list_ans[k][0] =& rooms_list[i];
-rooms_list_ans[k][1] =& rooms_list[j];
- k++;
-  }
-
-
-}}
-
-
-     /*fprintf(enter2,"%s %s %s %s \n", ro1.num, ro1.type,ro1.tv,ro1.avail);}
-    fclose(enter2); fclose(enter);
-    enter = fopen("rooms.txt","r");
-    enter2 = fopen("rooms2.txt","r");
-    while (fscanf(enter,"%s %s %s %s",ro1.num, ro1.type , ro1.tv, ro1.avail ) != EOF){
-    fgetc(enter);
-    while (1){//fscanf(enter,"%s %s %s %s",ro2.num, ro2.type , ro2.tv, ro2.avail) != EOF ){
-      fgetc(enter2);
-             printf(ro1.num);
-         printf(",");
-         printf(ro2.num);
-          printf("\n");
-     }
-        // while(fscanf(enter,"%s %s %s %s",ro2.num, ro2.type , ro2.tv, ro2.avail ) != EOF){
-         //if  ( 1 ==1 ){
-
-         //scanf("%s",del);
-         //}
-
-}
-fclose(enter2); fclose(enter);
-    //printf(ro1.num);*/
-    }
 
 
 void stringToIntList(char *str, int *arr, size_t arrSize, size_t *count)
@@ -226,29 +221,6 @@ void stringToIntList(char *str, int *arr, size_t arrSize, size_t *count)
   free(localStr);
 }
 
-void fifthquestion(){
-    char str1[20];
-    FILE *enter, *enter2;
-    struct Reservation Res1, Res2;
-    enter = fopen("reservations.txt","r");
-    enter2 = fopen("reservations.txt","r");
-    struct Reservation Res;
-    printf("Les qui partage les meme chose sont: \n");
-    while(fscanf(enter,"%s %s %s %s %s %s",Res.id_res,Res.days,Res.date,Res.nmb,Res.room ,Res.cli ) != -1){
-    fgetc(enter);
-
-    while(fscanf(enter2,"%s %s %s %s %s %s",Res2.id_res,Res2.days,Res2.date,Res2.nmb,Res2.room ,Res2.cli ) != -1){
-    fgetc(enter2);
-    if ((strcmp(Res1.cli, Res2.cli) ==1 ) & (strcmp(Res1.cli, Res2.cli) ==1)) {
-    int T ;
-    }
-}
-}
-printf("It is  not good");scanf("%s", str1);;
-fclose(enter);fclose(enter2);
-}
-
-
 
 void factures(){
     struct Reservation Res;
@@ -273,6 +245,75 @@ void factures(){
 
 } fclose(fptr1);
 }
+
+
+void fifthquestion(){//(struct client * final_list){
+
+   struct Room room_pairs[100][2];
+   struct Reservation reservation_list[100];
+   struct client clients_list[100] , final_list[100];
+   struct Room ro1,ro2;
+   struct Reservation r1,r2, Res;
+   FILE *enter, *fp;
+  roomssharedf(room_pairs);
+    enter = fopen("reservations.txt","r");
+    fp= fopen("clients.txt","r");
+   int k=0 ;
+
+   while(fscanf(enter,"%s %s %s %s %s %s",Res.id_res,Res.days,Res.date,Res.nmb,Res.room ,Res.cli ) != -1){
+   fgetc(enter);
+     reservation_list[k] = Res; k ++;}
+    int clint= 0;
+    while(fscanf(fp,"%s" "%s" "%s" "%s" ,h.name,h.prenom,h.id, h.tel) != -1){
+    fgetc(fp); clients_list[clint] =h; clint++;   }
+    char str1[20];
+    struct Reservation Res1, Res2;
+    int roomsNmb =  sizeof(room_pairs);
+    int i,j ;
+    int k2=0;
+    int k3=0;
+
+    for (i=0; i< roomsNmb; i++){
+     ro1 = room_pairs[i][0] ;
+     ro2 = room_pairs[i][1] ;
+     //printf("%s", "room_pairs[i][0].num");
+     //printf("%s", "room_pairs[i][1].num");
+     printf("\n %s \n", room_pairs[i][0].num);
+     for (j=0; j< roomsNmb; j++){
+        if ( strcmp( reservation_list[j].room,ro1.num)==0 ) {r1 = reservation_list[j];}
+         if ( strcmp( reservation_list[j].room,ro2.num)==0 ) {  r2 = reservation_list[j];  }
+        for ( k3=0; k3  <  sizeof(clients_list)  ; k3 ++  ) {
+
+         if( 1==1) //strcmp( clients_list[clint].id , r1.cli)  ==0  || ( strcmp( clients_list[clint].id , r2.cli) ==0  )  )
+         {
+         final_list[k2]= clients_list[clint]; k2++;  }
+            }
+
+   }
+
+     }
+
+//return final_list;
+
+
+
+
+    /*struct Reservation Res;
+    printf("Les qui partage les meme chose sont: \n");
+    while(fscanf(enter,"%s %s %s %s %s %s",Res.id_res,Res.days,Res.date,Res.nmb,Res.room ,Res.cli ) != -1){
+    fgetc(enter);
+
+    while(fscanf(enter2,"%s %s %s %s %s %s",Res2.id_res,Res2.days,Res2.date,Res2.nmb,Res2.room ,Res2.cli ) != -1){
+    fgetc(enter2);
+    if ((strcmp(Res1.cli, Res2.cli) ==1 ) & (strcmp(Res1.cli, Res2.cli) ==1)) {
+    int T ;
+    }
+}
+}
+printf("It is  not good");scanf("%s", str1);;
+fclose(enter);fclose(enter2);*/
+}
+
 
 //main method
 int main(){
@@ -331,7 +372,9 @@ int main(){
                         break;
                     }
                     case 5:{
-                        roomssharedf();
+                        //struct client clients_list[100];
+
+                        fifthquestion();
                         printf("Done\n");
                         break;
                     }
@@ -365,68 +408,10 @@ int main(){
                     return 0;
                 }
 
-
-
-
-           /* case 2:{
-                while(user_entry[0] =='y'){
-                printf("\nHello user and welcome to Hotel!");
-                printf("\n>>>>>>>>>>>>\tTo view available rooms --> 1 \t\t\t<<<<<<<<<<<<");
-   	            printf("\n>>>>>>>>>>>>\tTo request booking of room --> 2 \t<<<<<<<<<<<<");
-                printf("\n>> ");
-                scanf("%d",&c);
-                switch(c){
-                    case 1:{
-                        FILE* view;
-                        view = fopen("rooms.txt","r");
-                        printf("Available rooms are:\n");
-                        while(fscanf(view,"%s",h.name) != -1){
-                        printf("%s \n",h.name);
-                        }
-                        fclose(view);
-                        break;
-                    }
-
-                    case 2:{
-                        printf("Enter your name: ");
-                        scanf("%s",h.name);
-                        printf("Enter room to book: ");
-                        scanf("%s",h.name);
-                        printf("Enter WiFI plan (1GB/5GB): ");
-                        //scanf("%s",h.wifi);
-                        printf("Enter if bf (yes/no): ");
-                       // scanf("%s",h.bf);
-
-                        enter = fopen("bookings.txt","a");
-
-                       // fprintf(enter,"%s %s %s %s",h.name,h.room,h.wifi,h.bf);
-                        fprintf(enter,"\n");
-
-                        printf("Succesfully requested booking\n");
-                        fclose(enter);
-
-                    }
-                }
-
-                printf("Would you like to continue? (y/n)\n");
-                scanf("%s",user_entry);
-
-                }
-                if(strcmp(user_entry,"n") == 0){
-                    printf("Exiting...\n");
-                    printf("\e[1;1H\e[2J");
-                    printf("\n >Exited<\n\n");
-                    //system("clear");
-                    return 0;
-                }
-                else{
-                    printf("Wrong entry!\nExiting...\n");
-                    return 0;
-                }
-                break;
-            }
-        }*/
 }
+
+
+
 
 gestion_des_reservs(){
 int d ;
