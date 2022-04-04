@@ -142,13 +142,25 @@ printf("\n %s \n",rooms_list2[k].num);
 
 
 void view_bookings_room(char * str1){
-
+char  tarikh [20];
     enter = fopen("reservations.txt","r");
+    printf("\n Entrez la date pour avoir l'historique de la chambre avant cette date: " );
+    scanf("%s",tarikh);
+int starting[3];
+size_t converted;
+stringToIntList(tarikh, starting, sizeof starting / sizeof starting[0], &converted);
     struct Reservation Res;
     printf("Le histoire de la chambre est: \n");
     while(fscanf(enter,"%s %s %s %s %s %s",Res.id_res,Res.days,Res.date,Res.nmb,Res.room ,Res.cli ) != -1){
     fgetc(enter);
-    if (strcmp(Res.room ,str1)==0 ) {
+    int reserv_date[3];
+size_t converted1;stringToIntList(Res.date, reserv_date, sizeof reserv_date / sizeof reserv_date[0], &converted1);
+       if ( (strcmp(Res.room ,str1)==0)  &&
+       ((reserv_date[2]>starting[2])
+       || (((reserv_date[2]==starting[2]) && (reserv_date[1]==starting[1])))  ||
+        ( (reserv_date[2]==starting[2]) && (  reserv_date[1]==starting[1] ) && ( reserv_date[0] >= starting[0])  ) ) ) {
+
+
         printf("%s %s %s %s %s %s \n",Res.id_res,Res.days,Res.date,Res.nmb,Res.room ,Res.cli);
     }
 }}
@@ -366,7 +378,7 @@ int main(){
                     }
                     case 4:{
                          char str1[20];
-                         printf("\n Donnez l'identifiant du client : --> 3 \t");
+                         printf("\n Donnez l'numero du salle : \t");
                         scanf("%s",str1);
                         view_bookings_room(&str1);
                         break;
@@ -409,9 +421,6 @@ int main(){
                 }
 
 }
-
-
-
 
 gestion_des_reservs(){
 int d ;
